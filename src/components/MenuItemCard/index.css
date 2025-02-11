@@ -1,0 +1,92 @@
+.food-item-container {
+  display: flex;
+  background-color: #fff;
+  margin: 0px 10px 10px 10px;
+  padding: 10px;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+  border: 1px solid gainsboro;
+  width: 100%;
+}
+.mark-container {
+  height: 30px;
+  width: 30px;
+  border: 2px solid grey;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.mark {
+  background-color: green;
+  padding: 10px;
+  border-radius: 50%;
+}
+.markColor {
+  background-color: rgb(171, 10, 10);
+}
+.food-item-details-container {
+  display: flex;
+  align-items: center;
+  line-height: 13px;
+  width: 100%;
+  gap: 20px;
+}
+.food-item-image-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 20px;
+  justify-content: space-between;
+}
+.food-item-details {
+  display: flex;
+  gap: 10px;
+}
+.dishName {
+  font-size: 20px;
+}
+.dishDescription,
+.dishName {
+  line-height: 20px;
+}
+.food-item-image {
+  height: 130px;
+}
+.food-calories {
+  color: orange;
+}
+
+.counter-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: green;
+  border-radius: 30px;
+  width: 100px;
+  padding: 5px 15px 5px 15px;
+}
+
+.counter-container button {
+  border: none;
+  padding: 4px 6px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  background-color: transparent;
+  border-radius: 6px;
+  color: #fff;
+}
+
+.counter-container span {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #fff;
+  min-width: 24px;
+  text-align: center;
+}
+.cart-available {
+  color: blue;
+}
+.not-available {
+  color: red;
+}
