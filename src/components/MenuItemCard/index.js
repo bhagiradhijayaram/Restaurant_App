@@ -1,13 +1,11 @@
 import './index.css'
-import {useState} from 'react'
 
-const MenuItemCard = props => {
-  const {dishDetails, onIncreament, onDecrement} = props
+const MenuItemCard = ({dishDetails, count, onQuantityChange}) => {
   const {
+    dishId,
     dishName,
     dishDescription,
     dishImage,
-    dishId,
     dishPrice,
     dishCurrency,
     dishCalories,
@@ -16,24 +14,10 @@ const MenuItemCard = props => {
     dishType,
   } = dishDetails
 
-  const [count, setCount] = useState(0)
-
-  const onClickIncreament = () => {
-    setCount(prevCount => prevCount + 1)
-    onIncreament()
-  }
-
-  const onClickDecrement = () => {
-    if (count > 0) {
-      setCount(prevCount => prevCount - 1)
-      onDecrement()
-    }
-  }
-
   const markColor = dishType === 1 ? 'markColor' : ''
 
   return (
-    <li key={dishId} className="food-item-container">
+    <li className="food-item-container">
       <div className="food-item-details-container">
         <div className="mark-container">
           <div className={`mark ${markColor}`} />
@@ -48,9 +32,17 @@ const MenuItemCard = props => {
           {/* Counter and Customization */}
           {dishAvailability && (
             <div className="counter-container">
-              <button onClick={onClickDecrement}>-</button>
+              <button
+                onClick={() => onQuantityChange(dishId, -1)}
+                disabled={count === 0}
+                type="button"
+              >
+                -
+              </button>
               <span>{count}</span>
-              <button onClick={onClickIncreament}>+</button>
+              <button onClick={() => onQuantityChange(dishId, 1)} type="button">
+                +
+              </button>
             </div>
           )}
 
