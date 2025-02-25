@@ -11,3 +11,4 @@ const MenuCategory = ({category, setActiveTab, activeTab}) => (
 )
 
 export default MenuCategory
+
