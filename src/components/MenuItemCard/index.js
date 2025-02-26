@@ -30,27 +30,34 @@ const MenuItemCard = ({dishDetails, count, onQuantityChange}) => {
           <p className="dishDescription">{dishDescription}</p>
 
           {/* Counter and Customization */}
-          {dishAvailability && (
+          {dishAvailability ? (
             <div className="counter-container">
               <button
                 onClick={() => onQuantityChange(dishId, -1)}
                 disabled={count === 0}
                 type="button"
+                className="quantity-button"
+                data-testid="decrement-count"
               >
                 -
               </button>
-              <span>{count}</span>
-              <button onClick={() => onQuantityChange(dishId, 1)} type="button">
+              <span className="dish-quantity">{count}</span>
+              <button
+                onClick={() => onQuantityChange(dishId, 1)}
+                type="button"
+                className="quantity-button"
+                data-testid="increment-count"
+              >
                 +
               </button>
             </div>
+          ) : (
+            <p className="not-available">Not available</p>
           )}
 
-          {addonCat.length > 0 && (
+          {addonCat && addonCat.length > 0 && (
             <p className="cart-available">Customizations available</p>
           )}
-
-          {!dishAvailability && <p className="not-available">Not available</p>}
         </div>
       </div>
 
