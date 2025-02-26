@@ -7,9 +7,10 @@ import './App.css'
 const App = () => {
   const [dishData, setDishData] = useState([])
   const [menuList, setMenuList] = useState([])
-  const [activeTab, setActiveTab] = useState('Salads and Soup')
+  const [activeTab, setActiveTab] = useState('')
   const [cartItems, setCartItems] = useState({})
   const [cartCount, setCartCount] = useState(0)
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     const fetchFoodData = async () => {
@@ -17,11 +18,14 @@ const App = () => {
         'https://apis2.ccbp.in/restaurant-app/restaurant-menu-list-details'
 
       try {
+        setIsLoading(true)
         const response = await fetch(url)
         if (!response.ok) throw new Error('Failed to fetch')
 
         const data = await response.json()
-        if (!data.length || !data[0].table_menu_list) {
+
+        // Make sure we have the expected data structure
+        if (!data || !data.length || !data[0].table_menu_list) {
           throw new Error('Invalid data format')
         }
 
@@ -42,9 +46,20 @@ const App = () => {
         }))
 
         setDishData(formattedData)
-        setMenuList(formattedData.map(menu => menu.menuName))
+
+        // Extract menu categories and set the first one as active by default
+        const menuCategories = formattedData.map(menu => menu.menuName)
+        setMenuList(menuCategories)
+
+        // Set the first tab as active by default
+        if (menuCategories.length > 0) {
+          setActiveTab(menuCategories[0])
+        }
+
+        setIsLoading(false)
       } catch (error) {
         console.error('Error fetching data:', error.message)
+        setIsLoading(false)
       }
     }
 
@@ -53,16 +68,34 @@ const App = () => {
 
   const handleQuantityChange = (dishId, change) => {
     setCartItems(prev => {
-      const newQuantity = Math.max((prev[dishId] || 0) + change, 0)
+      const currentQuantity = prev[dishId] || 0
+      // Only allow decrement if current quantity is greater than 0
+      if (change < 0 && currentQuantity === 0) {
+        return prev
+      }
+
+      const newQuantity = Math.max(currentQuantity + change, 0)
       return {...prev, [dishId]: newQuantity}
     })
 
-    setCartCount(prev => Math.max(prev + change, 0))
+    // Only update cart count if we're actually changing the quantity
+    setCartCount(prev => {
+      const currentItems = Object.values(cartItems).reduce(
+        (total, qty) => total + qty,
+        0,
+      )
+      // Ensure we don't go below 0
+      return Math.max(currentItems + change, 0)
+    })
   }
 
   const filteredData = dishData.filter(
     eachItem => eachItem.menuName === activeTab,
   )
+
+  if (isLoading) {
+    return <div className="loading">Loading...</div>
+  }
 
   return (
     <>
@@ -82,7 +115,7 @@ const App = () => {
           <p>No dishes available in this category</p>
         ) : (
           filteredData.map(menu => (
-            <div key={menu.menuName}>
+            <div key={menu.menuName} className="dishes-container">
               <ul>
                 {menu.dishes.map(dish => (
                   <MenuItemCard
